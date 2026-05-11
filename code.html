@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dua Foundation | Empowering Lives Through Compassion</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .level-1-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 69, 50, 0.04), 0 4px 6px -4px rgba(0, 69, 50, 0.04);
+        }
+
+        /* Mission Tab System */
+        .mission-tab { transition: all 0.3s ease; }
+        .mission-tab.active {
+            background-color: #004532;
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 69, 50, 0.3);
+        }
+        .mission-panel { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+        .mission-panel.active { display: block; opacity: 1; transform: translateY(0); }
+
+        /* Achievement Card */
+        .achievement-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f0faf6 100%);
+        }
+        .achievement-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 69, 50, 0.12);
+        }
+
+        /* Counter animation */
+        @keyframes countUp { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .stat-number { animation: countUp 0.6s ease forwards; }
+
+        /* Image story card hover */
+        .story-card { overflow: hidden; transition: all 0.4s ease; }
+        .story-card img { transition: transform 0.5s ease; }
+        .story-card:hover img { transform: scale(1.05); }
+        .story-card-overlay {
+            background: linear-gradient(to top, rgba(0,45,32,0.85) 0%, rgba(0,45,32,0.1) 60%, transparent 100%);
+        }
+
+        /* Milestone timeline dot */
+        .milestone-dot::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #065f46;
+            border: 3px solid #8bd6b6;
+        }
+        .milestone-line {
+            border-left: 2px dashed #bec9c2;
+            padding-left: 2rem;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#00513b",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#edeef0",
+                      "on-primary-fixed": "#002116",
+                      "inverse-primary": "#8bd6b6",
+                      "outline": "#6f7973",
+                      "outline-variant": "#bec9c2",
+                      "on-tertiary-container": "#50e0a4",
+                      "on-secondary-container": "#616363",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-container": "#006041",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-variant": "#e1e2e4",
+                      "on-error-container": "#93000a",
+                      "secondary-container": "#dfe0e0",
+                      "surface-container-low": "#f3f4f6",
+                      "on-surface": "#191c1e",
+                      "inverse-on-surface": "#f0f1f3",
+                      "surface-bright": "#f8f9fb",
+                      "on-secondary-fixed-variant": "#454747",
+                      "secondary": "#5d5f5f",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#d9dadc",
+                      "on-tertiary-fixed": "#002113",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-background": "#191c1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "surface": "#f8f9fb",
+                      "primary-fixed": "#a6f2d1",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#e2e2e2",
+                      "inverse-surface": "#2e3132",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9fb",
+                      "primary-container": "#065f46",
+                      "primary": "#004532",
+                      "surface-tint": "#1b6b51",
+                      "primary-fixed-dim": "#8bd6b6",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "tertiary": "#00462e",
+                      "on-primary-container": "#8bd6b7",
+                      "on-surface-variant": "#3f4944",
+                      "surface-container-highest": "#e1e2e4",
+                      "surface-container-high": "#e7e8ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xl": "4rem",
+                      "base": "8px",
+                      "margin-safe": "32px",
+                      "sm": "1rem",
+                      "lg": "2.5rem",
+                      "md": "1.5rem",
+                      "xs": "0.5rem",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline": ["Sora", "sans-serif"],
+                      "display": ["Sora", "sans-serif"],
+                      "body": ["Sora", "sans-serif"],
+                      "label": ["Sora", "sans-serif"],
+                      "body-md": ["Sora", "sans-serif"],
+                      "label-sm": ["Sora", "sans-serif"],
+                      "h1": ["Sora", "sans-serif"],
+                      "body-lg": ["Sora", "sans-serif"],
+                      "h3": ["Sora", "sans-serif"],
+                      "h2": ["Sora", "sans-serif"],
+                      "button": ["Sora", "sans-serif"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                      "label-sm": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                      "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0", "fontWeight": "600"}],
+                      "h2": ["36px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-surface/95 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center max-w-[1280px] mx-auto px-gutter py-xs">
+<div class="font-h3 text-h3 font-bold text-primary">Dua Foundation</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="font-button text-button uppercase tracking-wide text-secondary hover:text-primary transition-colors" href="#mission">Mission</a>
+<a class="font-button text-button uppercase tracking-wide text-secondary hover:text-primary transition-colors" href="#impact">Impact</a>
+<a class="font-button text-button uppercase tracking-wide text-secondary hover:text-primary transition-colors" href="#contact">Contact</a>
+<a href="donation.html" target="_blank" rel="noopener noreferrer" class="bg-primary text-on-primary px-md py-xs rounded-full font-button text-button uppercase tracking-wide hover:opacity-90 transition-opacity">Donate Now</a>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</nav>
+<main>
+<!-- Hero Banner Section -->
+<section class="relative h-[870px] flex items-center overflow-hidden bg-primary">
+<img alt="Community Impact" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40" data-alt="A warm, emotionally resonant photograph of diverse community members coming together in a bright, sunlit outdoor space. The lighting is soft and golden, emphasizing a sense of hope and connection. The composition is clean and focused, reflecting a professional non-profit aesthetic with emerald green accents in the environment. People are shown smiling and engaged in supportive activities, capturing a mood of serene empathy and empowerment in a modern, light-filled setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb93j870x1AgGsz7Z98dZy6jJN5aNEpu4N5Ni_KIciipkyG33hoIZLh-4MUKOJxntKH6euYIvXhkdSUtNmDLT0axHBWTJ18llbmohx9yDl-aEkbOJA6cXN4gl1CEJIbNGYhUX83H7tEZgpq8ozEh5McpN3LI7rnUlvdXY_ZBUxR5uxmp_pT4xOGT9NqRX4-JGsAhSHNYpMoOn5pLV9tNDIhv9S4wjwlzqx3aFJLwNkw3aMWag3LezdUkVifeXzlokRmlkg-DBTMkyp"/>
+<div class="relative max-w-[1280px] mx-auto px-gutter w-full">
+<div class="max-w-2xl">
+<h1 class="font-h1 text-h1 text-on-primary mb-md">Empowering Lives Through Compassion</h1>
+<p class="font-body-lg text-body-lg text-on-primary/90 mb-lg">We bridge the gap between institutional professionalism and grassroots emotional connection to serve the most vulnerable in our community.</p>
+<div class="flex gap-md">
+<a href="donation.html" target="_blank" class="bg-surface text-primary px-lg py-sm rounded-full font-button text-button uppercase tracking-wide hover:bg-surface-variant transition-colors shadow-lg">Donate Now</a>
+<button class="border-2 border-surface text-on-primary px-lg py-sm rounded-full font-button text-button uppercase tracking-wide hover:bg-surface/10 transition-colors">Learn More</button>
+</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════════════════════
+     MISSION & ACHIEVEMENTS — High-Impact Tabbed Section
+═══════════════════════════════════════════════════════════ -->
+<section class="py-xl bg-surface" id="mission">
+  <div class="max-w-[1280px] mx-auto px-gutter">
+
+    <!-- Section Header -->
+    <div class="text-center mb-xl">
+      <span class="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-primary/70 bg-primary/8 px-4 py-1.5 rounded-full mb-4">Who We Are</span>
+      <h2 class="font-h2 text-h2 text-primary mb-sm">Mission & Achievements</h2>
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+        <span class="text-primary-fixed-dim text-lg">✦</span>
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+      </div>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto">
+        Two pillars of our commitment — a clear sense of purpose and a proven record of meaningful change.
+      </p>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="flex justify-center gap-3 mb-12" role="tablist">
+      <button
+        id="tab-mission"
+        class="mission-tab active flex items-center gap-2 px-8 py-3 rounded-full border-2 border-primary font-semibold text-sm uppercase tracking-widest"
+        onclick="switchTab('mission')"
+        role="tab"
+        aria-selected="true">
+        <span class="material-symbols-outlined text-[18px]">flag</span>
+        Our Mission
+      </button>
+      <button
+        id="tab-achievements"
+        class="mission-tab flex items-center gap-2 px-8 py-3 rounded-full border-2 border-primary text-primary font-semibold text-sm uppercase tracking-widest hover:bg-primary/5"
+        onclick="switchTab('achievements')"
+        role="tab"
+        aria-selected="false">
+        <span class="material-symbols-outlined text-[18px]">emoji_events</span>
+        Achievements
+      </button>
+    </div>
+
+    <!-- ── PANEL 1: MISSION ── -->
+    <div id="panel-mission" class="mission-panel active">
+
+      <!-- Mission Statement Banner -->
+      <div class="relative rounded-2xl overflow-hidden mb-12 bg-primary">
+        <div class="absolute inset-0 opacity-20"
+             style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><circle cx=%2230%22 cy=%2230%22 r=%2225%22 fill=%22none%22 stroke=%22%23ffffff%22 stroke-width=%220.5%22/></svg>'); background-size: 60px 60px;"></div>
+        <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[320px]">
+          <!-- Left: Statement -->
+          <div class="p-10 lg:p-16 flex flex-col justify-center">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-1 h-12 bg-primary-fixed-dim rounded-full"></div>
+              <span class="text-primary-fixed-dim text-sm font-semibold uppercase tracking-[0.2em]">Our Core Purpose</span>
+            </div>
+            <h3 class="font-h2 text-h2 text-on-primary mb-6 leading-tight">
+              Empowering Lives<br/>
+              <span class="text-primary-fixed-dim">Through Compassion.</span>
+            </h3>
+            <p class="text-on-primary/85 text-lg leading-relaxed mb-8 max-w-md">
+              At Dua Foundation, we believe that every human life carries inherent dignity and limitless potential. Our mission is to dismantle the barriers of poverty, illness, and ignorance — one family, one meal, one opportunity at a time. We do not simply provide aid; we kindle the spark of self-sufficiency and build communities that sustain themselves with pride.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <span class="bg-white/15 text-on-primary text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-white/20">🤝 Compassion-Led</span>
+              <span class="bg-white/15 text-on-primary text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-white/20">🌿 Sustainable Impact</span>
+              <span class="bg-white/15 text-on-primary text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-white/20">🔍 100% Transparent</span>
+            </div>
+          </div>
+          <!-- Right: Quote Block -->
+          <div class="flex items-center justify-center p-10 lg:p-16 bg-white/5 border-l border-white/10">
+            <div class="text-center">
+              <span class="text-7xl text-primary-fixed-dim font-serif leading-none block mb-4">"</span>
+              <p class="text-on-primary/90 text-xl italic leading-relaxed mb-6 max-w-xs">
+                The best of people are those who bring the most benefit to others.
+              </p>
+              <div class="h-px w-16 bg-primary-fixed-dim mx-auto mb-4"></div>
+              <span class="text-primary-fixed-dim text-sm font-semibold tracking-widest uppercase">Our Founding Principle</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Storytelling — 3 Image Cards -->
+      <div class="mb-12">
+        <h3 class="font-h3 text-h3 text-primary mb-2 text-center">Where We Work</h3>
+        <p class="text-on-surface-variant text-center mb-8 max-w-lg mx-auto">Three pillars of service, delivered with integrity and measured by lives changed — not just resources spent.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Card 1: Community -->
+          <div class="story-card rounded-2xl relative aspect-[4/3] cursor-pointer group border border-outline-variant/20 shadow-md">
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80&fit=crop" alt="Community Support — Families receiving food aid and smiling together"
+                 class="absolute inset-0 w-full h-full object-cover rounded-2xl" onerror="this.src='https://picsum.photos/seed/community/600/400'"/>
+            <div class="story-card-overlay absolute inset-0 rounded-2xl"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center mb-3 border border-white/30">
+                <span class="material-symbols-outlined text-[18px]">groups</span>
+              </div>
+              <h4 class="font-semibold text-lg mb-1">Community Outreach</h4>
+              <p class="text-white/75 text-sm leading-snug">Delivering food, shelter & emotional support to families in need across underserved areas.</p>
+            </div>
+          </div>
+
+          <!-- Card 2: Education -->
+          <div class="story-card rounded-2xl relative aspect-[4/3] cursor-pointer group border border-outline-variant/20 shadow-md">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80&fit=crop" alt="Educational Initiatives — Children studying in a bright classroom"
+                 class="absolute inset-0 w-full h-full object-cover rounded-2xl" onerror="this.src='https://picsum.photos/seed/education/600/400'"/>
+            <div class="story-card-overlay absolute inset-0 rounded-2xl"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center mb-3 border border-white/30">
+                <span class="material-symbols-outlined text-[18px]">school</span>
+              </div>
+              <h4 class="font-semibold text-lg mb-1">Educational Initiatives</h4>
+              <p class="text-white/75 text-sm leading-snug">Scholarships, free tuition centres, and digital literacy programs empowering the next generation.</p>
+            </div>
+          </div>
+
+          <!-- Card 3: Healthcare -->
+          <div class="story-card rounded-2xl relative aspect-[4/3] cursor-pointer group border border-outline-variant/20 shadow-md">
+            <img src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80&fit=crop" alt="Healthcare Aid — Volunteers distributing medicine to community members"
+                 class="absolute inset-0 w-full h-full object-cover rounded-2xl" onerror="this.src='https://picsum.photos/seed/healthcare/600/400'"/>
+            <div class="story-card-overlay absolute inset-0 rounded-2xl"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center mb-3 border border-white/30">
+                <span class="material-symbols-outlined text-[18px]">health_and_safety</span>
+              </div>
+              <h4 class="font-semibold text-lg mb-1">Healthcare Aid</h4>
+              <p class="text-white/75 text-sm leading-snug">Free medical camps, medicine drives, and mental health support for vulnerable communities.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Core Values Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="achievement-card rounded-xl border border-outline-variant/30 p-8 shadow-sm">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-primary text-[28px]">verified</span>
+          </div>
+          <h4 class="font-h3 text-h3 text-primary mb-3">Trust-Driven</h4>
+          <p class="text-on-surface-variant text-body-md leading-relaxed">Every programme we run is governed by ethical standards and community accountability. Your trust is our highest obligation.</p>
+        </div>
+        <div class="achievement-card rounded-xl border border-outline-variant/30 p-8 shadow-sm">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-primary text-[28px]">visibility</span>
+          </div>
+          <h4 class="font-h3 text-h3 text-primary mb-3">Radical Transparency</h4>
+          <p class="text-on-surface-variant text-body-md leading-relaxed">We publish detailed impact reports so donors and communities can see exactly how every rupee and dollar creates real change on the ground.</p>
+        </div>
+        <div class="achievement-card rounded-xl border border-outline-variant/30 p-8 shadow-sm">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-primary text-[28px]">auto_awesome</span>
+          </div>
+          <h4 class="font-h3 text-h3 text-primary mb-3">Sustainable Change</h4>
+          <p class="text-on-surface-variant text-body-md leading-relaxed">We go beyond relief — building self-sufficient communities through skills training, infrastructure, and long-term partnerships.</p>
+        </div>
+      </div>
+
+    </div><!-- /panel-mission -->
+
+    <!-- ── PANEL 2: ACHIEVEMENTS ── -->
+    <div id="panel-achievements" class="mission-panel">
+
+      <!-- Top Stats Bar -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+        <div class="achievement-card rounded-2xl border border-outline-variant/30 p-6 text-center shadow-sm">
+          <div class="stat-number text-4xl font-bold text-primary mb-1">15,000+</div>
+          <div class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Lives Transformed</div>
+          <div class="mt-3 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-4/5 rounded-full"></div>
+          </div>
+        </div>
+        <div class="achievement-card rounded-2xl border border-outline-variant/30 p-6 text-center shadow-sm">
+          <div class="stat-number text-4xl font-bold text-primary mb-1">420+</div>
+          <div class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Projects Delivered</div>
+          <div class="mt-3 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-3/4 rounded-full"></div>
+          </div>
+        </div>
+        <div class="achievement-card rounded-2xl border border-outline-variant/30 p-6 text-center shadow-sm">
+          <div class="stat-number text-4xl font-bold text-primary mb-1">85,000+</div>
+          <div class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Meals Provided</div>
+          <div class="mt-3 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-full rounded-full"></div>
+          </div>
+        </div>
+        <div class="achievement-card rounded-2xl border border-outline-variant/30 p-6 text-center shadow-sm">
+          <div class="stat-number text-4xl font-bold text-primary mb-1">$2.4M</div>
+          <div class="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Funds Mobilised</div>
+          <div class="mt-3 h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-5/6 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Milestone Grid -->
+      <div class="mb-12">
+        <h3 class="font-h3 text-h3 text-primary mb-2 text-center">Mission Accomplished</h3>
+        <p class="text-on-surface-variant text-center mb-8 max-w-lg mx-auto">A transparent record of completed initiatives — every milestone backed by verified community feedback and independent audit.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          <!-- Milestone Card template -->
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Food Security</span>
+              <h4 class="font-semibold text-on-surface mb-1 leading-snug">Ramadan Iftar Drive 2024</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Provided 12,000 hot Iftar meals across 6 cities to widows, orphans, and daily-wage workers.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Education</span>
+              <h4 class="font-semibold text-on-surface mb-1 leading-snug">Scholarship Programme — Cohort 3</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Awarded full academic scholarships to 320 underprivileged students at secondary and university level.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Healthcare</span>
+              <h4 class="font-semibold text-on-surface mb-1 leading-snug">Free Medical Camp — Rural District</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Deployed 40 volunteer doctors to serve 3,500+ patients with free consultations and medicines.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Disaster Relief</span>
+              <h4 class="font-semibold text-on-surface mb-1 leading-snug">Flood Relief — 2023 Emergency Response</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Delivered emergency ration kits, clean water, and temporary shelter to 2,200 displaced families.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Livelihood</span>
+              <h4 class="font-semibold text-on-surface mb-1 leading-snug">Women's Skills Empowerment Hub</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Trained 650 women in tailoring, digital literacy, and micro-enterprise management — 80% now self-employed.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+          <div class="achievement-card rounded-xl border border-outline-variant/30 p-6 shadow-sm flex gap-4 items-start">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-1 block">Clean Water</span>
+              <h4 class="font-semibered text-on-surface mb-1 leading-snug">Clean Water Wells — 3 Villages</h4>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Installed 3 solar-powered water purification units, providing safe drinking water to 4,000+ residents year-round.</p>
+              <span class="mt-2 inline-block text-xs font-semibold text-primary bg-primary/8 px-2 py-0.5 rounded-full">✓ Completed</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Testimonial Pull-Quote -->
+      <div class="bg-primary/5 border border-primary/15 rounded-2xl p-10 text-center">
+        <span class="text-5xl text-primary/30 font-serif">"</span>
+        <p class="text-on-surface text-xl italic leading-relaxed max-w-2xl mx-auto mb-6 -mt-4">
+          Dua Foundation didn't just give us food — they gave us back our dignity. We went from depending on charity to running our own small business. That is a miracle.
+        </p>
+        <div class="flex items-center justify-center gap-3">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">AF</div>
+          <div class="text-left">
+            <div class="font-semibold text-on-surface text-sm">Ayesha Fatima</div>
+            <div class="text-xs text-on-surface-variant">Programme Beneficiary — Lahore, 2023</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-achievements -->
+
+  </div>
+</section>
+
+<script>
+  function switchTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.mission-tab').forEach(t => {
+      t.classList.remove('active');
+      t.style.color = '';
+    });
+    const activeBtn = document.getElementById('tab-' + tab);
+    activeBtn.classList.add('active');
+
+    // Hide all panels
+    document.querySelectorAll('.mission-panel').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+
+    // Show active panel with fade-in
+    const activePanel = document.getElementById('panel-' + tab);
+    activePanel.style.display = 'block';
+    // Trigger reflow for transition
+    activePanel.offsetHeight;
+    activePanel.classList.add('active');
+  }
+
+  // Initialise: make sure mission panel is shown
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('panel-achievements').style.display = 'none';
+  });
+</script>
+
+
+<!-- ═══════════════════════════════════════════════
+     IMPACT SECTION — How We Help
+═══════════════════════════════════════════════ -->
+<section class="py-xl bg-surface-container-low" id="impact">
+  <div class="max-w-[1280px] mx-auto px-gutter">
+
+    <!-- Header -->
+    <div class="text-center mb-xl">
+      <span class="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-primary/70 bg-primary/8 px-4 py-1.5 rounded-full mb-4">Our Impact</span>
+      <h2 class="font-h2 text-h2 text-primary mb-sm">How We Help</h2>
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+        <span class="text-primary-fixed-dim">✦</span>
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+      </div>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+        Every contribution you make flows directly into one of our four core benefit pillars — each designed for maximum, measurable community impact.
+      </p>
+    </div>
+
+    <!-- Live Stats Banner -->
+    <div class="bg-primary rounded-2xl p-8 mb-12 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-4xl lg:text-5xl font-bold text-on-primary mb-1">15,000+</div>
+        <div class="text-xs uppercase tracking-widest text-primary-fixed-dim font-semibold">Lives Transformed</div>
+        <div class="mt-3 h-1.5 bg-primary-container rounded-full overflow-hidden">
+          <div class="h-full bg-primary-fixed w-4/5 rounded-full"></div>
+        </div>
+      </div>
+      <div>
+        <div class="text-4xl lg:text-5xl font-bold text-on-primary mb-1">85,000+</div>
+        <div class="text-xs uppercase tracking-widest text-primary-fixed-dim font-semibold">Meals Provided</div>
+        <div class="mt-3 h-1.5 bg-primary-container rounded-full overflow-hidden">
+          <div class="h-full bg-primary-fixed w-full rounded-full"></div>
+        </div>
+      </div>
+      <div>
+        <div class="text-4xl lg:text-5xl font-bold text-on-primary mb-1">420+</div>
+        <div class="text-xs uppercase tracking-widest text-primary-fixed-dim font-semibold">Projects Delivered</div>
+        <div class="mt-3 h-1.5 bg-primary-container rounded-full overflow-hidden">
+          <div class="h-full bg-primary-fixed w-3/4 rounded-full"></div>
+        </div>
+      </div>
+      <div>
+        <div class="text-4xl lg:text-5xl font-bold text-on-primary mb-1">$2.4M</div>
+        <div class="text-xs uppercase tracking-widest text-primary-fixed-dim font-semibold">Funds Mobilised</div>
+        <div class="mt-3 h-1.5 bg-primary-container rounded-full overflow-hidden">
+          <div class="h-full bg-primary-fixed w-5/6 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Community Benefit Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- Education -->
+      <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-7 shadow-sm flex flex-col">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary text-[32px]">school</span>
+        </div>
+        <h3 class="font-h3 text-h3 text-primary mb-3">Educational Support</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed flex-1">Scholarships, free tuition centres, and digital literacy programmes giving children a genuine pathway out of poverty.</p>
+        <div class="mt-5 pt-5 border-t border-outline-variant/30">
+          <div class="flex items-center justify-between text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">
+            <span>Students Supported</span><span class="text-primary font-bold">320+</span>
+          </div>
+          <div class="h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-3/4 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-7 shadow-sm flex flex-col">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary text-[32px]">health_and_safety</span>
+        </div>
+        <h3 class="font-h3 text-h3 text-primary mb-3">Healthcare Access</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed flex-1">Free medical camps, essential medicines, and mental health outreach ensuring no family is denied life-saving care due to cost.</p>
+        <div class="mt-5 pt-5 border-t border-outline-variant/30">
+          <div class="flex items-center justify-between text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">
+            <span>Patients Served</span><span class="text-primary font-bold">3,500+</span>
+          </div>
+          <div class="h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-4/5 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Relief -->
+      <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-7 shadow-sm flex flex-col">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary text-[32px]">emergency</span>
+        </div>
+        <h3 class="font-h3 text-h3 text-primary mb-3">Emergency Relief</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed flex-1">Rapid-response food kits, clean water, and temporary shelter for families displaced by floods, earthquakes, and crises.</p>
+        <div class="mt-5 pt-5 border-t border-outline-variant/30">
+          <div class="flex items-center justify-between text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">
+            <span>Families Aided</span><span class="text-primary font-bold">2,200+</span>
+          </div>
+          <div class="h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-full rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Livelihood -->
+      <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-7 shadow-sm flex flex-col">
+        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5">
+          <span class="material-symbols-outlined text-primary text-[32px]">trending_up</span>
+        </div>
+        <h3 class="font-h3 text-h3 text-primary mb-3">Livelihood & Skills</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed flex-1">Vocational training, micro-finance support, and entrepreneurship coaching creating lasting economic self-sufficiency.</p>
+        <div class="mt-5 pt-5 border-t border-outline-variant/30">
+          <div class="flex items-center justify-between text-xs uppercase tracking-widest text-on-surface-variant font-semibold mb-1">
+            <span>Women Empowered</span><span class="text-primary font-bold">650+</span>
+          </div>
+          <div class="h-1.5 bg-primary/10 rounded-full overflow-hidden">
+            <div class="h-full bg-primary w-2/3 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Before / After Transformation -->
+    <div class="rounded-2xl overflow-hidden border border-outline-variant/30 shadow-md mb-12">
+      <div class="bg-primary px-8 py-5 flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary-fixed-dim">compare</span>
+        <h3 class="font-h3 text-h3 text-on-primary">Real Transformation — Before &amp; After</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <!-- Before -->
+        <div class="bg-slate-100 p-8 border-r border-outline-variant/20">
+          <span class="inline-block bg-slate-300 text-slate-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-5">Before Our Support</span>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-red-400 text-[18px] mt-0.5">cancel</span>Children dropping out of school due to fees</li>
+            <li class="flex items-start gap-3 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-red-400 text-[18px] mt-0.5">cancel</span>Families skipping meals — 1 or 0 meals per day</li>
+            <li class="flex items-start gap-3 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-red-400 text-[18px] mt-0.5">cancel</span>No access to doctors or essential medicines</li>
+            <li class="flex items-start gap-3 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-red-400 text-[18px] mt-0.5">cancel</span>Women with no income or vocational skills</li>
+            <li class="flex items-start gap-3 text-on-surface-variant text-sm"><span class="material-symbols-outlined text-red-400 text-[18px] mt-0.5">cancel</span>Disaster survivors with no emergency support</li>
+          </ul>
+        </div>
+        <!-- After -->
+        <div class="bg-primary/5 p-8">
+          <span class="inline-block bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-5">After Our Support</span>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3 text-on-surface text-sm"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>320+ students on full scholarships, back in school</li>
+            <li class="flex items-start gap-3 text-on-surface text-sm"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>85,000+ nutritious meals served to families in need</li>
+            <li class="flex items-start gap-3 text-on-surface text-sm"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>3,500+ patients treated at free medical camps</li>
+            <li class="flex items-start gap-3 text-on-surface text-sm"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>650 women self-employed after skills training</li>
+            <li class="flex items-start gap-3 text-on-surface text-sm"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span>2,200+ flood-affected families received emergency kits</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donor CTA -->
+    <div class="bg-primary rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <h3 class="font-h3 text-h3 text-on-primary mb-2">Your Donation Creates Real Change</h3>
+        <p class="text-on-primary/80 text-sm max-w-lg">100% of your donation reaches those in need. We operate with full financial transparency — every rupee is audited and reported.</p>
+      </div>
+      <div class="flex gap-4 shrink-0">
+        <a href="donation.html" target="_blank" class="bg-primary-fixed-dim text-primary font-semibold px-8 py-3 rounded-full uppercase tracking-wide text-sm hover:bg-white transition-colors">Donate Now</a>
+        <a href="#mission" class="border-2 border-white/40 text-on-primary font-semibold px-8 py-3 rounded-full uppercase tracking-wide text-sm hover:bg-white/10 transition-colors">Learn More</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- ═══════════════════════════════════════════════
+     CONTACT SECTION
+═══════════════════════════════════════════════ -->
+<section class="py-xl bg-surface" id="contact">
+  <div class="max-w-[1280px] mx-auto px-gutter">
+
+    <!-- Header -->
+    <div class="text-center mb-xl">
+      <span class="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-primary/70 bg-primary/8 px-4 py-1.5 rounded-full mb-4">Get In Touch</span>
+      <h2 class="font-h2 text-h2 text-primary mb-sm">We Are Here to Help</h2>
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+        <span class="text-primary-fixed-dim">✦</span>
+        <div class="h-px w-12 bg-primary-fixed-dim"></div>
+      </div>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mx-auto">
+        Whether you want to donate, volunteer, or simply learn more — reach out to us today. Every message matters to us.
+      </p>
+    </div>
+
+    <!-- CTA Warm Banner -->
+    <div class="bg-primary rounded-2xl p-8 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-5">
+        <div class="w-14 h-14 bg-white/15 rounded-full flex items-center justify-center shrink-0 border border-white/20">
+          <span class="material-symbols-outlined text-primary-fixed-dim text-[28px]">volunteer_activism</span>
+        </div>
+        <div>
+          <h3 class="font-h3 text-h3 text-on-primary mb-1">Ready to Make a Difference?</h3>
+          <p class="text-on-primary/80 text-sm">Our team responds within 24 hours. We'd love to hear from you.</p>
+        </div>
+      </div>
+      <div class="flex gap-3 shrink-0">
+        <a href="tel:+923001234567" class="bg-primary-fixed-dim text-primary font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wide hover:bg-white transition-colors">Call Us Now</a>
+        <a href="mailto:contact@duafoundation.org" class="border-2 border-white/40 text-on-primary font-semibold px-6 py-3 rounded-full text-sm uppercase tracking-wide hover:bg-white/10 transition-colors">Email Us</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+
+      <!-- LEFT: Contact Details -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- Phone -->
+        <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-6 shadow-sm flex items-start gap-4">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-[24px]">call</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary uppercase tracking-wide text-xs mb-1">Phone</h4>
+            <a href="tel:+923001234567" class="text-on-surface font-semibold text-lg hover:text-primary transition-colors">+92 300 1234567</a>
+            <p class="text-on-surface-variant text-xs mt-0.5">WhatsApp also available</p>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-6 shadow-sm flex items-start gap-4">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-[24px]">mail</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary uppercase tracking-wide text-xs mb-1">Email</h4>
+            <a href="mailto:contact@duafoundation.org" class="text-on-surface font-semibold text-lg hover:text-primary transition-colors break-all">contact@duafoundation.org</a>
+            <p class="text-on-surface-variant text-xs mt-0.5">We reply within 24 hours</p>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="achievement-card bg-white rounded-2xl border border-outline-variant/30 p-6 shadow-sm flex items-start gap-4">
+          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-primary text-[24px]">location_on</span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-primary uppercase tracking-wide text-xs mb-1">Visit Us</h4>
+            <p class="text-on-surface font-semibold">House 12, Street 4, F-7/2</p>
+            <p class="text-on-surface-variant text-sm">Islamabad, Pakistan — 44000</p>
+          </div>
+        </div>
+
+        <!-- Office Hours -->
+        <div class="bg-primary/5 border border-primary/15 rounded-2xl p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
+            <h4 class="font-semibold text-primary uppercase tracking-widest text-xs">Office Hours</h4>
+          </div>
+          <ul class="space-y-2 text-sm text-on-surface-variant">
+            <li class="flex justify-between"><span>Monday – Friday</span><span class="font-semibold text-on-surface">9:00 AM – 6:00 PM</span></li>
+            <li class="flex justify-between"><span>Saturday</span><span class="font-semibold text-on-surface">10:00 AM – 2:00 PM</span></li>
+            <li class="flex justify-between"><span>Sunday</span><span class="font-semibold text-red-500">Closed</span></li>
+          </ul>
+        </div>
+
+        <!-- Social Media -->
+        <div class="bg-white rounded-2xl border border-outline-variant/30 p-6 shadow-sm">
+          <h4 class="font-semibold text-primary uppercase tracking-widest text-xs mb-4">Follow &amp; Connect</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl px-4 py-3 text-sm font-semibold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl px-4 py-3 text-sm font-semibold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              Instagram
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-3 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl px-4 py-3 text-sm font-semibold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              Twitter/X
+            </a>
+            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer"
+               class="flex items-center gap-3 bg-green-50 hover:bg-green-100 text-green-700 rounded-xl px-4 py-3 text-sm font-semibold transition-colors">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Contact Form -->
+      <div class="lg:col-span-3">
+        <div class="bg-white rounded-2xl border border-outline-variant/30 shadow-sm p-8 lg:p-10">
+          <div class="mb-8">
+            <h3 class="font-h3 text-h3 text-primary mb-2">Send Us a Message</h3>
+            <p class="text-on-surface-variant text-sm">Fill in the form below and our team will get back to you within 24 hours.</p>
+          </div>
+          <form action="#" class="space-y-5" onsubmit="event.preventDefault(); document.getElementById('form-success').classList.remove('hidden'); this.reset();">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-2">Full Name *</label>
+                <input required type="text" placeholder="e.g. Ahmad Khan"
+                       class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3 text-sm outline-none transition-all"/>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-2">Email Address *</label>
+                <input required type="email" placeholder="you@example.com"
+                       class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3 text-sm outline-none transition-all"/>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-2">Phone Number</label>
+                <input type="tel" placeholder="+92 300 XXXXXXX"
+                       class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3 text-sm outline-none transition-all"/>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-2">Inquiry Type</label>
+                <select class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3 text-sm outline-none transition-all text-on-surface-variant">
+                  <option value="">Select a topic...</option>
+                  <option value="donate">I want to Donate</option>
+                  <option value="volunteer">I want to Volunteer</option>
+                  <option value="partner">Partnership / Collaboration</option>
+                  <option value="media">Media &amp; Press</option>
+                  <option value="general">General Inquiry</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-2">Your Message *</label>
+              <textarea required rows="5" placeholder="Tell us how we can help, or share your thoughts with us..."
+                        class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3 text-sm outline-none transition-all resize-none"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-primary text-on-primary py-4 rounded-xl font-semibold uppercase tracking-widest text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">send</span>
+              Send Message
+            </button>
+
+            <!-- Success Message -->
+            <div id="form-success" class="hidden bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+              <p class="text-sm text-on-surface font-semibold">Thank you! Your message has been sent. We'll be in touch within 24 hours.</p>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-highest w-full mt-xl">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg max-w-[1280px] mx-auto px-gutter py-xl">
+<div>
+<div class="font-h3 text-h3 font-bold text-primary mb-base">Dua Foundation</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Dua Foundation is a non-profit organization dedicated to fostering hope and providing essential support to communities in need through transparent and efficient action.</p>
+</div>
+<div class="flex flex-col gap-sm md:items-center">
+<h4 class="font-button text-primary uppercase text-sm tracking-widest mb-xs">Quick Links</h4>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Mission</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Impact</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex flex-col gap-sm md:items-end">
+<h4 class="font-button text-primary uppercase text-sm tracking-widest mb-xs">Legal</h4>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<div class="mt-md flex gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="share">share</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="favorite">favorite</span>
+</div>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto px-gutter py-md border-t border-outline-variant/30 text-center md:text-left">
+<span class="font-body-md text-body-md text-on-surface-variant/80">© 2024 Dua Foundation. All rights reserved.</span>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Donor Verification | Dua Foundation</title>
+  <meta name="description" content="Securely verify your identity before completing your donation to Dua Foundation."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    * { font-family: 'Sora', sans-serif; box-sizing: border-box; }
+
+    /* Animated gradient background */
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #003d2a 0%, #005236 25%, #065f46 50%, #047857 70%, #002116 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; background: #34d399; top: -150px; right: -150px; animation-delay: 0s; }
+    .orb-2 { width: 350px; height: 350px; background: #6ee7b7; bottom: -100px; left: -100px; animation-delay: 3s; }
+    .orb-3 { width: 250px; height: 250px; background: #a7f3d0; top: 40%; left: 5%; animation-delay: 5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50%       { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* Glassmorphism card */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 32px 64px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    /* Input styles */
+    .form-input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      color: white;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.45); }
+    .form-input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #6ee7b7;
+      box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.15);
+    }
+    .form-input.error { border-color: #fca5a5 !important; box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.15) !important; }
+
+    /* Donate button */
+    .donate-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .donate-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .donate-btn:hover::before { left: 100%; }
+    .donate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(16, 185, 129, 0.55);
+    }
+    .donate-btn:active { transform: translateY(0); }
+
+    /* Captcha box */
+    .captcha-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.20);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .captcha-box:hover { background: rgba(255,255,255,0.13); }
+    .captcha-box.checked { border-color: #6ee7b7; background: rgba(110,231,183,0.12); }
+
+    /* Checkmark animation */
+    .checkmark-circle { stroke-dasharray: 166; stroke-dashoffset: 166; animation: checkDraw 0.6s ease forwards; }
+    .checkmark-tick   { stroke-dasharray: 48;  stroke-dashoffset: 48;  animation: checkDraw 0.4s 0.3s ease forwards; }
+    @keyframes checkDraw { to { stroke-dashoffset: 0; } }
+
+    /* Step indicator */
+    .step-dot { transition: all 0.3s ease; }
+
+    /* Success overlay */
+    .success-overlay { animation: fadeInScale 0.5s ease forwards; }
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Spinning loader */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+
+    /* Trust badge pulse */
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(110,231,183,0.4); }
+      50%       { box-shadow: 0 0 0 8px rgba(110,231,183,0); }
+    }
+    .trust-pulse { animation: pulse-green 2.5s ease-in-out infinite; }
+  </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4 py-12">
+
+  <!-- Floating orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Main Card -->
+  <div class="glass-card rounded-3xl w-full max-w-md relative z-10 p-8 lg:p-10">
+
+    <!-- Logo & Branding -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-700 shadow-lg mb-4 trust-pulse">
+        <span class="material-symbols-outlined text-white text-[32px]">volunteer_activism</span>
+      </div>
+      <h1 class="text-2xl font-bold text-white tracking-tight">Dua Foundation</h1>
+      <p class="text-emerald-300 text-xs font-semibold uppercase tracking-[0.2em] mt-1">Secure Donor Verification</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="flex items-center justify-center gap-2 mb-8" id="step-indicator">
+      <div class="step-dot w-8 h-8 rounded-full bg-emerald-400 flex items-center justify-center text-xs font-bold text-white shadow-lg" id="step1-dot">1</div>
+      <div class="h-px w-10 bg-white/20" id="step-line"></div>
+      <div class="step-dot w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold text-white/50" id="step2-dot">2</div>
+    </div>
+
+    <!-- STEP 1: Verification Form -->
+    <div id="step-1">
+      <div class="mb-6">
+        <h2 class="text-lg font-bold text-white mb-1">Verify Your Identity</h2>
+        <p class="text-white/60 text-sm">We need a few details to process your donation securely.</p>
+      </div>
+
+      <form id="verify-form" class="space-y-4" novalidate>
+
+        <!-- Full Name -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-2">
+            <span class="material-symbols-outlined text-[14px] align-middle mr-1">person</span>Full Name *
+          </label>
+          <input id="input-name" type="text" placeholder="e.g. Ahmad Ali Khan"
+                 class="form-input w-full rounded-xl px-4 py-3 text-sm text-white"/>
+          <p class="error-msg text-red-300 text-xs mt-1 hidden" id="err-name">Please enter your full name.</p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-2">
+            <span class="material-symbols-outlined text-[14px] align-middle mr-1">mail</span>Email Address *
+          </label>
+          <input id="input-email" type="email" placeholder="you@example.com"
+                 class="form-input w-full rounded-xl px-4 py-3 text-sm text-white"/>
+          <p class="error-msg text-red-300 text-xs mt-1 hidden" id="err-email">Please enter a valid email address.</p>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-2">
+            <span class="material-symbols-outlined text-[14px] align-middle mr-1">call</span>Phone Number *
+          </label>
+          <div class="flex gap-2">
+            <select class="form-input rounded-xl px-3 py-3 text-sm text-white w-28 shrink-0">
+              <option value="+92" class="bg-emerald-900">🇵🇰 +92</option>
+              <option value="+1"  class="bg-emerald-900">🇺🇸 +1</option>
+              <option value="+44" class="bg-emerald-900">🇬🇧 +44</option>
+              <option value="+971" class="bg-emerald-900">🇦🇪 +971</option>
+            </select>
+            <input id="input-phone" type="tel" placeholder="300 1234567"
+                   class="form-input w-full rounded-xl px-4 py-3 text-sm text-white"/>
+          </div>
+          <p class="error-msg text-red-300 text-xs mt-1 hidden" id="err-phone">Please enter a valid phone number.</p>
+        </div>
+
+        <!-- Donation Amount -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-2">
+            <span class="material-symbols-outlined text-[14px] align-middle mr-1">payments</span>Donation Amount (PKR)
+          </label>
+          <div class="grid grid-cols-4 gap-2 mb-2">
+            <button type="button" onclick="setAmount(500)"  class="amount-btn bg-white/10 hover:bg-emerald-500/30 text-white text-xs font-semibold py-2 rounded-lg border border-white/15 transition-all">₨500</button>
+            <button type="button" onclick="setAmount(1000)" class="amount-btn bg-white/10 hover:bg-emerald-500/30 text-white text-xs font-semibold py-2 rounded-lg border border-white/15 transition-all">₨1K</button>
+            <button type="button" onclick="setAmount(5000)" class="amount-btn bg-white/10 hover:bg-emerald-500/30 text-white text-xs font-semibold py-2 rounded-lg border border-white/15 transition-all">₨5K</button>
+            <button type="button" onclick="setAmount(10000)" class="amount-btn bg-white/10 hover:bg-emerald-500/30 text-white text-xs font-semibold py-2 rounded-lg border border-white/15 transition-all">₨10K</button>
+          </div>
+          <input id="input-amount" type="number" placeholder="Or enter custom amount..."
+                 class="form-input w-full rounded-xl px-4 py-3 text-sm text-white"/>
+        </div>
+
+        <!-- Captcha -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-2">
+            <span class="material-symbols-outlined text-[14px] align-middle mr-1">security</span>Security Check *
+          </label>
+          <div id="captcha-box" class="captcha-box rounded-xl p-4 flex items-center justify-between" onclick="toggleCaptcha()">
+            <div class="flex items-center gap-3">
+              <div id="captcha-checkbox" class="w-6 h-6 rounded border-2 border-white/40 flex items-center justify-center transition-all bg-transparent shrink-0">
+                <svg id="captcha-check-svg" class="w-4 h-4 hidden" viewBox="0 0 52 52">
+                  <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#6ee7b7" stroke-width="3"/>
+                  <path class="checkmark-tick" fill="none" stroke="#6ee7b7" stroke-width="4" stroke-linecap="round" d="M14 27l7 7 17-17"/>
+                </svg>
+              </div>
+              <span class="text-white/80 text-sm font-medium">I am not a robot</span>
+            </div>
+            <div class="text-right">
+              <div class="text-white/30 text-[9px] uppercase tracking-widest">reCAPTCHA</div>
+              <div class="text-white/20 text-[8px]">Privacy · Terms</div>
+            </div>
+          </div>
+          <p class="error-msg text-red-300 text-xs mt-1 hidden" id="err-captcha">Please confirm you are not a robot.</p>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-btn"
+                class="donate-btn w-full text-white font-bold py-4 rounded-xl text-sm uppercase tracking-widest flex items-center justify-center gap-2 mt-2">
+          <span id="btn-text" class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+            Proceed to Donate
+          </span>
+          <svg id="btn-spinner" class="spinner w-5 h-5 hidden" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="white" stroke-width="4"/>
+            <path class="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+        </button>
+
+      </form>
+
+      <!-- Trust Badges -->
+      <div class="mt-6 pt-5 border-t border-white/10 grid grid-cols-3 gap-3 text-center">
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-emerald-400 text-[20px]">lock</span>
+          <span class="text-white/50 text-[10px] leading-tight">256-bit SSL Encrypted</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-emerald-400 text-[20px]">verified_user</span>
+          <span class="text-white/50 text-[10px] leading-tight">Secure & Private</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="material-symbols-outlined text-emerald-400 text-[20px]">favorite</span>
+          <span class="text-white/50 text-[10px] leading-tight">100% Goes to Cause</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Success Screen -->
+    <div id="step-2" class="hidden text-center py-4 success-overlay">
+      <!-- Animated success icon -->
+      <div class="flex justify-center mb-6">
+        <div class="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center border-2 border-emerald-400/40">
+          <svg class="w-14 h-14" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#10b981" stroke-width="2.5"/>
+            <path class="checkmark-tick" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" d="M14 27l7 7 17-17"/>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-white mb-2">Verification Complete!</h2>
+      <p class="text-white/60 text-sm mb-2">Thank you, <strong id="confirmed-name" class="text-emerald-300"></strong>.</p>
+      <p class="text-white/60 text-sm mb-6">Your donation of <strong id="confirmed-amount" class="text-emerald-300"></strong> is being processed. A confirmation will be sent to <strong id="confirmed-email" class="text-emerald-300"></strong>.</p>
+
+      <!-- Impact Preview -->
+      <div class="bg-white/8 rounded-2xl p-5 mb-6 text-left border border-white/10">
+        <p class="text-xs font-semibold uppercase tracking-widest text-emerald-300 mb-3">Your Donation Will Help</p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-white/75 text-sm"><span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Provide meals to families in need</li>
+          <li class="flex items-center gap-2 text-white/75 text-sm"><span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Support children's education</li>
+          <li class="flex items-center gap-2 text-white/75 text-sm"><span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>Fund free healthcare camps</li>
+        </ul>
+      </div>
+
+      <a href="code.html"
+         class="donate-btn inline-flex items-center gap-2 text-white font-semibold px-8 py-3 rounded-xl text-sm uppercase tracking-wide">
+        <span class="material-symbols-outlined text-[18px]">home</span>
+        Return to Website
+      </a>
+      <p class="text-white/30 text-xs mt-4">Reference ID: <span id="ref-id" class="font-mono"></span></p>
+    </div>
+
+  </div><!-- /card -->
+
+  <!-- Bottom Attribution -->
+  <div class="fixed bottom-4 left-0 right-0 text-center z-10">
+    <p class="text-white/25 text-xs">© 2024 Dua Foundation · Empowering Lives Through Compassion</p>
+  </div>
+
+  <script>
+    let captchaChecked = false;
+
+    // ── Captcha toggle ──
+    function toggleCaptcha() {
+      captchaChecked = !captchaChecked;
+      const box   = document.getElementById('captcha-box');
+      const cb    = document.getElementById('captcha-checkbox');
+      const svg   = document.getElementById('captcha-check-svg');
+      const err   = document.getElementById('err-captcha');
+
+      if (captchaChecked) {
+        box.classList.add('checked');
+        cb.classList.add('border-emerald-400', 'bg-emerald-500/20');
+        svg.classList.remove('hidden');
+        err.classList.add('hidden');
+      } else {
+        box.classList.remove('checked');
+        cb.classList.remove('border-emerald-400', 'bg-emerald-500/20');
+        svg.classList.add('hidden');
+      }
+    }
+
+    // ── Amount preset buttons ──
+    function setAmount(val) {
+      document.getElementById('input-amount').value = val;
+      document.querySelectorAll('.amount-btn').forEach(b => {
+        b.classList.remove('bg-emerald-500/40', 'border-emerald-400', 'text-emerald-200');
+      });
+      event.target.classList.add('bg-emerald-500/40', 'border-emerald-400', 'text-emerald-200');
+    }
+
+    // ── Validation helpers ──
+    function showErr(id, msgId) {
+      document.getElementById(id).classList.add('error');
+      document.getElementById(msgId).classList.remove('hidden');
+    }
+    function clearErr(id, msgId) {
+      document.getElementById(id).classList.remove('error');
+      document.getElementById(msgId).classList.add('hidden');
+    }
+
+    // ── Live validation on input ──
+    document.getElementById('input-name').addEventListener('input', function() {
+      this.value.trim().length >= 3 ? clearErr('input-name','err-name') : null;
+    });
+    document.getElementById('input-email').addEventListener('input', function() {
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value) ? clearErr('input-email','err-email') : null;
+    });
+    document.getElementById('input-phone').addEventListener('input', function() {
+      this.value.replace(/\D/g,'').length >= 7 ? clearErr('input-phone','err-phone') : null;
+    });
+
+    // ── Form submit ──
+    document.getElementById('verify-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name   = document.getElementById('input-name').value.trim();
+      const email  = document.getElementById('input-email').value.trim();
+      const phone  = document.getElementById('input-phone').value.replace(/\D/g,'');
+      const amount = document.getElementById('input-amount').value || '0';
+      let valid = true;
+
+      // Validate name
+      if (name.length < 3) { showErr('input-name','err-name'); valid = false; }
+      else clearErr('input-name','err-name');
+
+      // Validate email
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('input-email','err-email'); valid = false; }
+      else clearErr('input-email','err-email');
+
+      // Validate phone
+      if (phone.length < 7) { showErr('input-phone','err-phone'); valid = false; }
+      else clearErr('input-phone','err-phone');
+
+      // Validate captcha
+      if (!captchaChecked) {
+        document.getElementById('err-captcha').classList.remove('hidden');
+        valid = false;
+      } else {
+        document.getElementById('err-captcha').classList.add('hidden');
+      }
+
+      if (!valid) return;
+
+      // Show loading state
+      const btn     = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+      btn.disabled = true;
+      btnText.classList.add('hidden');
+      spinner.classList.remove('hidden');
+
+      // Simulate processing (1.8s)
+      setTimeout(() => {
+        // Populate step 2
+        document.getElementById('confirmed-name').textContent   = name;
+        document.getElementById('confirmed-email').textContent  = email;
+        document.getElementById('confirmed-amount').textContent =
+          'PKR ' + parseInt(amount || 500).toLocaleString();
+        document.getElementById('ref-id').textContent =
+          'DUA-' + Math.random().toString(36).substring(2,8).toUpperCase();
+
+        // Update step indicator
+        document.getElementById('step1-dot').className =
+          'step-dot w-8 h-8 rounded-full bg-emerald-400/50 flex items-center justify-center text-xs font-bold text-white';
+        document.getElementById('step-line').className = 'h-px w-10 bg-emerald-400/60';
+        document.getElementById('step2-dot').className =
+          'step-dot w-8 h-8 rounded-full bg-emerald-400 flex items-center justify-center text-xs font-bold text-white shadow-lg';
+
+        // Transition panels
+        const s1 = document.getElementById('step-1');
+        const s2 = document.getElementById('step-2');
+        s1.style.opacity = '0';
+        s1.style.transform = 'translateY(-10px)';
+        s1.style.transition = 'all 0.3s ease';
+        setTimeout(() => {
+          s1.classList.add('hidden');
+          s2.classList.remove('hidden');
+        }, 300);
+      }, 1800);
+    });
+  </script>
+</body>
+</html>

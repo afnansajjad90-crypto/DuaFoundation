@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donate – Dua Foundation</title>
+  <meta name="description" content="Securely donate to Dua Foundation supporting education, healthcare, and community development in Pakistan.">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {font-family: 'Inter', sans-serif;}
+    .gradient-bg {background: linear-gradient(135deg, #e0f2f1 0%, #c8e6c9 100%);}
+    .tier-card {transition: transform 0.3s, box-shadow 0.3s;}
+    .tier-card:hover {transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08);}
+    .payment-card {display: flex; align-items: center; padding: 1rem; background: #fff; border-radius: .75rem; box-shadow: 0 2px 6px rgba(0,0,0,0.05); cursor: pointer;}
+    .payment-card input {margin-right: .5rem;}
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+  <!-- Header (reuse from main site) -->
+  <header class="sticky top-0 bg-white/95 backdrop-blur-md shadow-sm z-10">
+    <div class="max-w-[1280px] mx-auto flex justify-between items-center px-gutter py-xs">
+      <a href="code.html" class="font-h3 font-bold text-primary">Dua Foundation</a>
+      <a href="code.html" class="text-primary hover:underline">← Back to Site</a>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto p-6">
+    <!-- Hero Section -->
+    <section class="text-center mb-8">
+      <h1 class="text-3xl font-extrabold text-primary mb-4">Support a Life Today</h1>
+      <p class="text-lg text-gray-600">Your generous donation directly fuels education, healthcare, food security, and empowerment projects.</p>
+    </section>
+
+    <!-- Donation Tiers -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="tier-card bg-white rounded-xl p-6 shadow flex flex-col items-center">
+        <span class="material-symbols-outlined text-primary text-4xl mb-2">restaurant</span>
+        <h3 class="font-semibold text-primary mb-2">Feed a family for a week</h3>
+        <p class="text-sm text-gray-600 mb-4 text-center">Provides essential meals for a household of five for 7 days.</p>
+        <button onclick="setAmount(5000)" class="w-full bg-primary text-white py-2 rounded-md font-medium hover:opacity-90 transition-opacity">Donate PKR 5,000</button>
+      </div>
+      <div class="tier-card bg-white rounded-xl p-6 shadow flex flex-col items-center">
+        <span class="material-symbols-outlined text-primary text-4xl mb-2">school</span>
+        <h3 class="font-semibold text-primary mb-2">Support a child's education</h3>
+        <p class="text-sm text-gray-600 mb-4 text-center">Covers books, uniforms and tuition for one child.</p>
+        <button onclick="setAmount(8000)" class="w-full bg-primary text-white py-2 rounded-md font-medium hover:opacity-90 transition-opacity">Donate PKR 8,000</button>
+      </div>
+      <div class="tier-card bg-white rounded-xl p-6 shadow md:col-span-2 flex flex-col items-center">
+        <span class="material-symbols-outlined text-primary text-4xl mb-2">local_hospital</span>
+        <h3 class="font-semibold text-primary mb-2">Community Health Kit</h3>
+        <p class="text-sm text-gray-600 mb-4 text-center">Funds essential medicines and basic health services for a neighborhood.</p>
+        <button onclick="setAmount(10000)" class="w-full bg-primary text-white py-2 rounded-md font-medium hover:opacity-90 transition-opacity">Donate PKR 10,000</button>
+      </div>
+    </section>
+
+    <!-- Direct Donation Form -->
+    <section class="bg-white rounded-xl p-6 shadow">
+      <form id="donation-form" class="space-y-6" onsubmit="event.preventDefault(); alert('Payment processing is not implemented in this demo.');">
+        <div>
+          <label class="block text-sm font-medium text-primary mb-2" for="amount">Donation Amount (PKR)</label>
+          <input type="number" id="amount" name="amount" min="50" placeholder="e.g., 5000" class="w-full bg-surface-container-low border border-outline-variant/40 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-xl px-4 py-3" required />
+        </div>
+        <div>
+          <span class="block text-sm font-medium text-primary mb-2">Choose Payment Method</span>
+          <div class="grid grid-cols-1 gap-4">
+            <label class="payment-card cursor-pointer">
+              <input type="radio" name="method" value="jazzcash" required />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/JazzCash_logo.png" alt="JazzCash" class="h-6 mr-2" />
+              <span class="font-medium text-primary">JazzCash</span>
+            </label>
+            <label class="payment-card cursor-pointer">
+              <input type="radio" name="method" value="easypaisa" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/EasyPaisa_Logo.png" alt="EasyPaisa" class="h-6 mr-2" />
+              <span class="font-medium text-primary">EasyPaisa</span>
+            </label>
+            <label class="payment-card cursor-pointer">
+              <input type="radio" name="method" value="card" />
+              <svg class="h-6 w-6 text-primary mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1v-4h16v4c0 .55-.45 1-1 1zm0-10H4V7c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v1z"/></svg>
+              <span class="font-medium text-primary">Credit / Debit Card</span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="w-full bg-primary text-white py-3 rounded-xl font-semibold uppercase tracking-wider hover:opacity-90 transition-opacity">Donate Now</button>
+      </form>
+    </section>
+
+    <p class="text-center text-sm text-gray-500 mt-4">All donations are 100% tax‑exempt and Zakat‑eligible.</p>
+  </main>
+
+  <!-- Footer (reuse from main site) -->
+  <footer class="bg-surface-container-highest py-6 mt-12">
+    <div class="max-w-[1280px] mx-auto text-center text-on-surface-variant">
+      © 2024 Dua Foundation. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="donation.js"></script>
+  <script>
+    function setAmount(value) {
+      document.getElementById('amount').value = value;
+      document.getElementById('amount').focus();
+    }
+  </script>
+</body>
+</html>
